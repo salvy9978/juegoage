@@ -10,7 +10,7 @@ public class Main {
         MultiplayerGameRunner gameRunner = new MultiplayerGameRunner();
         gameRunner.setLeagueLevel(4);
         
-        gameRunner.addAgent(AgentAGE1.class);
+       // gameRunner.addAgent(AgentAGE1.class);
         
 
         // Para incluir agentes en python
@@ -22,13 +22,14 @@ public class Main {
         	String rutaRelativa = new File("").getAbsolutePath();
             String rutaProyecto = "\\src\\test\\java\\Agent.py";
             gameRunner.addAgent("python3 "+ "\""+ rutaRelativa + rutaProyecto +"\"");
+            gameRunner.addAgent("python3 "+ "\""+ rutaRelativa + rutaProyecto +"\"");
         	break;
         case "Linux":
         	gameRunner.addAgent("python3 /home/user/player.py");
         	break;
         }
         
-        
+        gameRunner.simulate(); //Sirve para simular partidas
         gameRunner.start(); //Sirve para arrancar el servidor
     }
 }
