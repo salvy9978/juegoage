@@ -29,7 +29,7 @@ public class Main {
         	break;
         }
         
-        gameRunner.simulate(); //Sirve para simular partidas
+        //gameRunner.simulate(); //Sirve para simular partidas
         gameRunner.start(); //Sirve para arrancar el servidor
     }
 }
