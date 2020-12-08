@@ -1,33 +1,20 @@
 import sys
 import math
-import json
-#import os
 
-#wd = os.getcwd()
-#print(wd, file=sys.stderr, flush=True)
+# Made by Illedan, pb4 and Agade
+
 map_radius = int(input())
 center_radius = int(input())
 min_swap_impulse = int(input())  # Impulse needed to steal a prisoner from another car
 car_count = int(input())  # the number of cars you control
 
 ####################################### VARIABLES #################################
-actualizacionTiempoBolas = 1 #mejor no variar
-aceleracionBuscarBolasMax = 200
-aceleracionBuscarBolasMin = 10
-umbralAcercamientoABola = 550
-aceleracionAcercarAlCentro = 50
-aceleracionChoqueMax = 180
-
-
-with open('archivoVariables.json') as file:
-    data = json.load(file)
-    actualizacionTiempoBolas = data['actualizacionTiempoBolas'] #mejor no variar
-    aceleracionBuscarBolasMax = data['aceleracionBuscarBolasMax']
-    aceleracionBuscarBolasMin = data['aceleracionBuscarBolasMin']
-    umbralAcercamientoABola = data['umbralAcercamientoABola']
-    aceleracionAcercarAlCentro = data['aceleracionAcercarAlCentro']
-    aceleracionChoqueMax = data['aceleracionChoqueMax']
-
+actualizacionTiempoBolas = 3
+aceleracionBuscarBolasMax = 199
+aceleracionBuscarBolasMin = 50
+umbralAcercamientoABola = 3759
+aceleracionAcercarAlCentro = 72
+aceleracionChoqueMax = 199
 
 ######################################### FUNCIONES ##############################
 def getDistancia(x1, y1, x2, y2):
@@ -77,6 +64,7 @@ while True:
     print(misCoches, file=sys.stderr, flush=True)
     print(cochesEnemigo, file=sys.stderr, flush=True)
     print(bolas, file=sys.stderr, flush=True)
+    print(min_swap_impulse, file=sys.stderr, flush=True)
 
     buscaBolas = quienBucarBolas(misCoches, bolas)
     enemigosCochesConBolas = []
@@ -129,4 +117,3 @@ while True:
         # X Y THRUST MESSAGE
 
         print(str(dirX)+" "+str(dirY)+" "+str(aceleracion)+" "+coche)
-        #print(str(dirX)+" "+str(dirY)+" "+"52.4"+" "+coche)

@@ -33,7 +33,7 @@ public class Main {
 	        	gameRunner.addAgent("python3 /home/user/player.py");
 	        	break;
 	        }
-	        gameRunner.addAgent(AgentAGE1.class);
+	        gameRunner.addAgent(AgentAGE2.class);
 	        /*
 	        gameResult = gameRunner.simulate();
 	        //resultados.add(gameRunner.simulate()); //Sirve para simular partidas

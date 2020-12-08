@@ -96,7 +96,7 @@ public class EntrenadorEscaladaEE1 {
 		
 		
 		GameResult gameResult;
-		for(int i=0; i<5;i++) {
+		for(int i=0; i<40;i++) {
 			
 			MultiplayerGameRunner gameRunner = new MultiplayerGameRunner();
 		    gameRunner.setLeagueLevel(4);
@@ -126,11 +126,17 @@ public class EntrenadorEscaladaEE1 {
 		    if(partidaGolesMarcadosRival>partidaGolesMarcadosMios) {
 		    	partidasPerdidas += 1;
 		    }
+		    
+		    System.out.println(this.individuo.getVectorVarianzas().toString());
 		}
 		
 		fitness = (partidasGanadas - partidasPerdidas)* Math.abs(golesMarcadosMios - golesMarcadosRival);
 		
-		return fitness;
+         
+		
+		
+		return (partidasGanadas>0)?partidasGanadas:partidasPerdidas;
+		//return fitness;
 	}
 	
 	
@@ -155,16 +161,43 @@ public class EntrenadorEscaladaEE1 {
 	
 	
 	public void entrenar() {
+		File archivoSoluciones = null;
+		FileWriter fwArchivoSoluciones = null;
+		try {
+			archivoSoluciones = new File("soluciones.txt");
+			archivoSoluciones.createNewFile();
+			fwArchivoSoluciones = new FileWriter(archivoSoluciones.getAbsoluteFile(), true);
+		  } catch (IOException e) {
+		      System.out.println("An error occurred.");
+		      e.printStackTrace();
+		  }
+		
 		this.inicializarAGE();
 		this.fitnessMayor = this.getInidividualFitness(this.individuo.getVectorCodificacion());
+		try {
+			fwArchivoSoluciones.append("VectorCod: "+ individuo.getVectorCodificacion().toString()+ " VectorVar: "+individuo.getVectorVarianzas().toString()+ " Fitness: "+this.fitnessMayor+"\n");
+			fwArchivoSoluciones.flush();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
 		int contador = 0;
 		while(contador<this.ciclos) {
 			List<Double> vectorNuevoInidividuo = this.mutarInidividuo(this.individuo.getVectorCodificacion(), this.individuo.getVectorVarianzas());
 			double nuevoFitness = this.getInidividualFitness(vectorNuevoInidividuo);
-			if(nuevoFitness < this.fitnessMayor) {
+			if(nuevoFitness > this.fitnessMayor) {
 				this.individuo.setVectorCodificacion(vectorNuevoInidividuo);
 				this.fitnessMayor = nuevoFitness;
 				this.aciertos[contador%this.s] = 1;
+				try {
+					fwArchivoSoluciones.append("VectorCod: "+ individuo.getVectorCodificacion().toString()+ " VectorVar: "+individuo.getVectorVarianzas().toString()+ " Fitness: "+this.fitnessMayor+"\n");
+					fwArchivoSoluciones.flush();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
 			}else {
 				this.aciertos[contador%this.s] = 0;
 			}
@@ -193,6 +226,7 @@ public class EntrenadorEscaladaEE1 {
           
             	
             }
+            
 			contador += 1;
 			
 		}
