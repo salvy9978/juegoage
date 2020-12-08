@@ -96,7 +96,7 @@ public class EntrenadorEscaladaEE1 {
 		
 		
 		GameResult gameResult;
-		for(int i=0; i<40;i++) {
+		for(int i=0; i<20;i++) {
 			
 			MultiplayerGameRunner gameRunner = new MultiplayerGameRunner();
 		    gameRunner.setLeagueLevel(4);
@@ -135,8 +135,8 @@ public class EntrenadorEscaladaEE1 {
          
 		
 		
-		return (partidasGanadas>0)?partidasGanadas:partidasPerdidas;
-		//return fitness;
+		//return (partidasGanadas>0)?partidasGanadas:partidasPerdidas;
+		return fitness;
 	}
 	
 	
@@ -183,7 +183,8 @@ public class EntrenadorEscaladaEE1 {
 		}
 		
 		int contador = 0;
-		while(contador<this.ciclos) {
+		boolean parar = false;
+		while(contador<this.ciclos && !parar) {
 			List<Double> vectorNuevoInidividuo = this.mutarInidividuo(this.individuo.getVectorCodificacion(), this.individuo.getVectorVarianzas());
 			double nuevoFitness = this.getInidividualFitness(vectorNuevoInidividuo);
 			if(nuevoFitness > this.fitnessMayor) {
@@ -226,13 +227,80 @@ public class EntrenadorEscaladaEE1 {
           
             	
             }
-            
+            //ver si se ha perdido la posibilidad de variacion genetica para parar
+            int contAux = 0;
+            for (int i=0; i<this.individuo.getVectorVarianzas().size();i++) {
+            	if(this.individuo.getVectorVarianzas().get(i)<0.1) {
+            		++contAux;
+            	}
+            }
+            if(contAux==this.individuo.getVectorVarianzas().size()) {
+            	parar = true;
+            }
+            //incrementar ciclo
 			contador += 1;
 			
 		}
 		
 	}
 	
+	
+	public void evaluarIndividuoFinal() {
+		int partidasGanadas = 0;
+		Map<Integer, Integer> scores;
+		GameResult gameResult;
+		int golesMarcadosMios = 0;
+		int golesMarcadosRival = 0;
+		int numeroPartidasEvFinal = 100;
+		
+		File archivoVariables = new File("archivoVariables.json");
+		try {
+			archivoVariables.createNewFile();
+			FileWriter fw = new FileWriter(archivoVariables.getAbsoluteFile(), false);
+			JSONObject json = new JSONObject();
+			for(int i=0;i<configListaVariables.size();i++) {
+				json.put(configListaVariables.get(i).getNombreVariable(),this.individuo.getVectorCodificacion().get(i).intValue());
+			}
+			fw.append(json.toString());
+			fw.flush();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		for(int i=0; i<numeroPartidasEvFinal;i++) {
+			
+			MultiplayerGameRunner gameRunner = new MultiplayerGameRunner();
+		    gameRunner.setLeagueLevel(4);
+		    if(playerEntrenarClass!=null) {
+		    	gameRunner.addAgent(playerEntrenarClass);
+		    }
+		    if(playerCmdEntrenar!=null) {
+		    	gameRunner.addAgent(playerCmdEntrenar);
+		    }
+		    
+		    if(playerRivalClass!=null) {
+		    	gameRunner.addAgent(playerRivalClass);
+		    }
+		    
+		    if(playerCmdRival!=null) {
+		    	gameRunner.addAgent(playerCmdRival);
+		    }
+		    gameResult = gameRunner.simulate();
+		    scores = gameResult.scores;
+		    int partidaGolesMarcadosMios = scores.get(0);
+		    int partidaGolesMarcadosRival = scores.get(1);
+		    golesMarcadosMios += partidaGolesMarcadosMios;
+		    golesMarcadosRival += partidaGolesMarcadosRival;
+		    if(partidaGolesMarcadosMios>partidaGolesMarcadosRival) {
+		    	partidasGanadas += 1;
+		    }
+		}
+		
+		 System.out.println("\n\n\n--------------\nWin Rate: " + partidasGanadas + " partidas ganadas de "+ numeroPartidasEvFinal+"\n------------------\n");
+		
+	}
 	
 	
 	
