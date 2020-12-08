@@ -1,9 +1,10 @@
+package com.entrenador;
 
 
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class AgentAGE1 {
+public class AgentAGE2 {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         int rad2 = Integer.parseInt(scanner.nextLine());
@@ -42,14 +43,9 @@ public class AgentAGE1 {
                 Car car = carPoses.get(i);
                 if(car.ballId != -1) target = new Car(0,0,0);
                 int thrust = 150;
-                String s = i == 0? "BotAGE_1a" : "BotAGE_1b";
+                String s = i == 0? "BotAGE_2a" : "BotAGE_2b";
                 if(target.distance(car) < 550) thrust = 10;
-                if(i==0) {
-                	System.out.println(4000 + " " + 4000 + " " + 10 + " " + s);
-                }else {
-                	System.out.println(4000 + " " + 4000 + " " + 10 + " " + s);
-                }
-                
+                System.out.println(target.X + " " + target.Y + " " + thrust + " " + s);
             }
         }
     }
