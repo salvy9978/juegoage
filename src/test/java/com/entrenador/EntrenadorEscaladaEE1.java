@@ -173,6 +173,9 @@ public class EntrenadorEscaladaEE1 {
 		  }
 		
 		this.inicializarAGE();
+		
+		evaluarIndividuoFinal(fwArchivoSoluciones);
+		
 		this.fitnessMayor = this.getInidividualFitness(this.individuo.getVectorCodificacion());
 		try {
 			fwArchivoSoluciones.append("VectorCod: "+ individuo.getVectorCodificacion().toString()+ " VectorVar: "+individuo.getVectorVarianzas().toString()+ " Fitness: "+this.fitnessMayor+"\n");
@@ -192,7 +195,7 @@ public class EntrenadorEscaladaEE1 {
 				this.fitnessMayor = nuevoFitness;
 				this.aciertos[contador%this.s] = 1;
 				try {
-					fwArchivoSoluciones.append("VectorCod: "+ individuo.getVectorCodificacion().toString()+ " VectorVar: "+individuo.getVectorVarianzas().toString()+ " Fitness: "+this.fitnessMayor+"\n");
+					fwArchivoSoluciones.append("VectorCod: "+ individuo.getVectorCodificacion().toString()+ " VectorVar: "+individuo.getVectorVarianzas().toString()+ " Fitness: "+this.fitnessMayor+ " Ciclo: "+contador+"\n");
 					fwArchivoSoluciones.flush();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
@@ -242,10 +245,11 @@ public class EntrenadorEscaladaEE1 {
 			
 		}
 		
+		evaluarIndividuoFinal(fwArchivoSoluciones);
 	}
 	
 	
-	public void evaluarIndividuoFinal() {
+	public void evaluarIndividuoFinal(FileWriter fwArchivoSoluciones) {
 		int partidasGanadas = 0;
 		Map<Integer, Integer> scores;
 		GameResult gameResult;
@@ -298,7 +302,14 @@ public class EntrenadorEscaladaEE1 {
 		    }
 		}
 		
-		 System.out.println("\n\n\n--------------\nWin Rate: " + partidasGanadas + " partidas ganadas de "+ numeroPartidasEvFinal+"\n------------------\n");
+		 //System.out.println("\n\n\n------------------\nWin Rate: " + partidasGanadas + " partidas ganadas de "+ numeroPartidasEvFinal+"\n------------------\n");
+		try {
+			fwArchivoSoluciones.append("\n\n\n------------------\nWin Rate: " + partidasGanadas + " partidas ganadas de "+ numeroPartidasEvFinal+"\n------------------\n");
+			fwArchivoSoluciones.flush();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 	

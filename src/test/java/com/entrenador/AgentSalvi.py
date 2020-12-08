@@ -21,7 +21,7 @@ aceleracionChoqueMax = 180
 
 with open('archivoVariables.json') as file:
     data = json.load(file)
-    actualizacionTiempoBolas = data['actualizacionTiempoBolas'] #mejor no variar
+    actualizacionTiempoBolas = data['actualizacionTiempoBolas'] 
     aceleracionBuscarBolasMax = data['aceleracionBuscarBolasMax']
     aceleracionBuscarBolasMin = data['aceleracionBuscarBolasMin']
     umbralAcercamientoABola = data['umbralAcercamientoABola']

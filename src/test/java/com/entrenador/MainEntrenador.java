@@ -18,14 +18,13 @@ public class MainEntrenador {
 		variablesConfig.add(new VariableEstrategia("aceleracionChoqueMax", 0, 200, 120, 150));
 		
 		String rutaRelativa = new File("").getAbsolutePath();
-        String rutaProyecto = "\\src\\test\\java\\AgentSalvi.py";
+        String rutaProyecto = "\\src\\test\\java\\com\\entrenador\\AgentSalvi.py";
 		String jugadorAEntrenar = "python3 "+ "\""+ rutaRelativa + rutaProyecto +"\"";
 		
 		EntrenadorEscaladaEE1 entrenador = new EntrenadorEscaladaEE1(10000, variablesConfig, jugadorAEntrenar, AgentAGE2.class);
 		
 		entrenador.entrenar();
 		
-		entrenador.evaluarIndividuoFinal();
 		
 		
 		
