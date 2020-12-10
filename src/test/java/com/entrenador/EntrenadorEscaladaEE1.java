@@ -114,6 +114,7 @@ public class EntrenadorEscaladaEE1 {
 		    if(playerCmdRival!=null) {
 		    	gameRunner.addAgent(playerCmdRival);
 		    }
+		    
 		    gameResult = gameRunner.simulate();
 		    scores = gameResult.scores;
 		    int partidaGolesMarcadosMios = scores.get(0);

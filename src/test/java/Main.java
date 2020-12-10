@@ -21,11 +21,11 @@ public class Main {
 	        // Para incluir agentes en python
 	        switch(os) {
 	        case "NonePython":
-	        	gameRunner.addAgent(AgentAGE2.class);
+	        	gameRunner.addAgent(AgentAGE1.class);
 	        	break;
 	        case "Windows":
 	        	String rutaRelativa = new File("").getAbsolutePath();
-	            String rutaProyecto = "\\src\\test\\java\\AgentSalvi.py";
+	            String rutaProyecto = "\\src\\test\\java\\AgentSalvi4.py";
 	            gameRunner.addAgent("python3 "+ "\""+ rutaRelativa + rutaProyecto +"\"");
 	            
 	        	break;

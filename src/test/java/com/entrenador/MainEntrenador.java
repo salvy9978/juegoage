@@ -21,7 +21,11 @@ public class MainEntrenador {
         String rutaProyecto = "\\src\\test\\java\\com\\entrenador\\AgentSalvi.py";
 		String jugadorAEntrenar = "python3 "+ "\""+ rutaRelativa + rutaProyecto +"\"";
 		
-		EntrenadorEscaladaEE1 entrenador = new EntrenadorEscaladaEE1(10000, variablesConfig, jugadorAEntrenar, AgentAGE2.class);
+		String rutaRelativa2 = new File("").getAbsolutePath();
+        String rutaProyecto2 = "\\src\\test\\java\\com\\entrenador\\AgentSalvi5.py";
+		String jugadorAEntrenar2 = "python3 "+ "\""+ rutaRelativa2 + rutaProyecto2 +"\"";
+		
+		EntrenadorEscaladaEE1 entrenador = new EntrenadorEscaladaEE1(10000, variablesConfig, jugadorAEntrenar, jugadorAEntrenar2);
 		
 		entrenador.entrenar();
 		

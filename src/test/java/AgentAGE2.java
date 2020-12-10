@@ -44,7 +44,8 @@ public class AgentAGE2 {
                 int thrust = 150;
                 String s = i == 0? "BotAGE_2a" : "BotAGE_2b";
                 if(target.distance(car) < 550) thrust = 10;
-                System.out.println(target.X + " " + target.Y + " " + thrust + " " + s);
+                //System.out.println(target.X + " " + target.Y + " " + thrust + " " + s);
+                System.out.println("3000 3000 0 coche");
             }
         }
     }

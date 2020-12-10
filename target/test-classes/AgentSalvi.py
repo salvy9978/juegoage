@@ -1,24 +1,20 @@
 import sys
 import math
-import json
-#import os
 
-#wd = os.getcwd()
-#print(wd, file=sys.stderr, flush=True)
+# Made by Illedan, pb4 and Agade
+
 map_radius = int(input())
 center_radius = int(input())
 min_swap_impulse = int(input())  # Impulse needed to steal a prisoner from another car
 car_count = int(input())  # the number of cars you control
 
 ####################################### VARIABLES #################################
-actualizacionTiempoBolas = 1 
-aceleracionBuscarBolasMax = 200
-aceleracionBuscarBolasMin = 10
-umbralAcercamientoABola = 550
-aceleracionAcercarAlCentro = 50
-aceleracionChoqueMax = 180
-
-
+actualizacionTiempoBolas = 3
+aceleracionBuscarBolasMax = 199
+aceleracionBuscarBolasMin = 50
+umbralAcercamientoABola = 3759
+aceleracionAcercarAlCentro = 72
+aceleracionChoqueMax = 199
 
 ######################################### FUNCIONES ##############################
 def getDistancia(x1, y1, x2, y2):
@@ -68,6 +64,7 @@ while True:
     print(misCoches, file=sys.stderr, flush=True)
     print(cochesEnemigo, file=sys.stderr, flush=True)
     print(bolas, file=sys.stderr, flush=True)
+    print(min_swap_impulse, file=sys.stderr, flush=True)
 
     buscaBolas = quienBucarBolas(misCoches, bolas)
     enemigosCochesConBolas = []
@@ -82,42 +79,20 @@ while True:
         dirY = 0
         aceleracion = 0
 
-        if(buscaBolas[0][0]==i): #si existen bolas, el no tenga y esta mas cerca  de una la busca si o si
-            coche="buscaBolas"
-            dirX = bolas[buscaBolas[0][1]][2] + actualizacionTiempoBolas*bolas[buscaBolas[0][1]][4]
-            dirY = bolas[buscaBolas[0][1]][3] + actualizacionTiempoBolas*bolas[buscaBolas[0][1]][5]
-            if buscaBolas[1]<umbralAcercamientoABola:
-                aceleracion = aceleracionBuscarBolasMin
-            else:
-                aceleracion = aceleracionBuscarBolasMax
-        else: #el que esta mas lejos (bucara bolas o intentara chocar adversarios) o los dos si no existen bolas
-            if misCoches[i][7]==-1:
-                if(len(bolas)<2):
-                    coche="choque"
-                    if(len(enemigosCochesConBolas)>0):
-                        cocheEnemigo = enemigosCochesConBolas.pop()
-                        dirX = cocheEnemigo[2]
-                        dirY = cocheEnemigo[3]
-                        aceleracion = aceleracionChoqueMax
-                    else:
-                        dirX = cochesEnemigo[0][2]
-                        dirY = cochesEnemigo[0][3]
-                        aceleracion = aceleracionChoqueMax
-                else:
-                    coche = "bucaBolas"
-                    dirX = bolas[(buscaBolas[0][1]+1)%2][2] + actualizacionTiempoBolas*bolas[(buscaBolas[0][1]+1)%2][4]
-                    dirY = bolas[(buscaBolas[0][1]+1)%2][3] + actualizacionTiempoBolas*bolas[(buscaBolas[0][1]+1)%2][5]
-                    if getDistancia(misCoches[i][2],misCoches[i][3],bolas[(buscaBolas[0][1]+1)%2][2],bolas[(buscaBolas[0][1]+1)%2][3])<umbralAcercamientoABola:
-                        aceleracion = aceleracionBuscarBolasMin
-                    else:
-                        aceleracion = aceleracionBuscarBolasMax
-            else:
-                coche="centro"
-                dirX = 0
-                dirY = 0
-                aceleracion = aceleracionAcercarAlCentro
+        if(len(bolas)==1):
+            dirX = bolas[0][2] + (misCoches[i][2]-bolas[0][2]/bolas[0][4]-misCoches[i][4]) * bolas[0][4]
+            dirY = bolas[0][3] + (misCoches[i][3]-bolas[0][3]/bolas[0][5]-misCoches[i][5]) * bolas[0][5]
+            aceleracion = 100
+        elif len(bolas)==2:
+            dirX = bolas[i][2] + (misCoches[i][2]-bolas[i][2]/bolas[i][4]-misCoches[i][4]) * bolas[i][4]
+            dirY = bolas[i][3] + (misCoches[i][3]-bolas[i][3]/bolas[i][5]-misCoches[i][5]) * bolas[i][5]
+            aceleracion = 100
+
+
+
 
         # X Y THRUST MESSAGE
-
+        dirX = int(dirX)
+        dirY = int(dirY)
+        aceleracion = int(aceleracion)
         print(str(dirX)+" "+str(dirY)+" "+str(aceleracion)+" "+coche)
-        #print(str(dirX)+" "+str(dirY)+" "+"52.4"+" "+coche)

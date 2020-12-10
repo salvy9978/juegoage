@@ -1,28 +1,57 @@
 import sys
 import math
-import json
-#import os
 
-#wd = os.getcwd()
-#print(wd, file=sys.stderr, flush=True)
+
 map_radius = int(input())
 center_radius = int(input())
 min_swap_impulse = int(input())  # Impulse needed to steal a prisoner from another car
 car_count = int(input())  # the number of cars you control
 
 ####################################### VARIABLES #################################
-actualizacionTiempoBolas = 1 
+
+actualizacionTiempoBolas = 1
 aceleracionBuscarBolasMax = 200
 aceleracionBuscarBolasMin = 10
 umbralAcercamientoABola = 550
 aceleracionAcercarAlCentro = 50
 aceleracionChoqueMax = 180
-
-
-
 ######################################### FUNCIONES ##############################
 def getDistancia(x1, y1, x2, y2):
     return math.sqrt(math.pow(x1-x2,2)+math.pow(y1-y2,2))
+
+def getAngulo(x, y):
+    angulo = 0
+    if(x>0 and y>0):
+        anguloAux = math.atan(y/x)
+        angulo = math.degrees(anguloAux)
+    if(x<0 and y>0):
+        anguloAux = math.atan(y/-x)
+        angulo = 180 - math.degrees(anguloAux)
+    if(x<0 and y<0):
+        anguloAux = math.atan(-y/-x)
+        angulo = 180 + math.degrees(anguloAux)
+    if(x>0 and y<0):
+        anguloAux = math.atan(-y/x)
+        angulo = 360 - math.degrees(anguloAux)
+    return angulo
+
+def getDiferenciaAngulos(angulo, x1, y1, x2, y2):
+    return abs(angulo-getAngulo(x2-x1, y2-y1))
+
+def getDistanciaABolas(misCohes, bolas): #coche1 - bola1, coche2 - bola1, coche1 - bola2, coche2 - bola2
+    listaDistancias = []
+    for i in bolas:
+        for j in misCohes:
+            listaDistancias.append(getDistancia(j[2],j[3],i[2],i[3]))
+    return listaDistancias
+
+def getAnguloABolas(misCohes, bolas):
+    listaAngulos = []
+    for i in bolas:
+        for j in misCohes:
+            listaAngulos.append(getDiferenciaAngulos(j[6], j[2], j[3], i[2], i[3]))
+    return listaAngulos
+
 def quienBucarBolas(coches, bolas): #devuelve el id del coche que este mas cercano a una bola
     ids = [-1,-1]
     distancia = 2*map_radius+1
@@ -34,7 +63,6 @@ def quienBucarBolas(coches, bolas): #devuelve el id del coche que este mas cerca
                 ids[0]=j
                 ids[1]=i
     return [ids,distancia]; #ids[0] --> posicion en la lista de coches, id[1] --> posicion en la lista de bolas, distancia --> distancia entre ambas
-
 
 
 # game loop
@@ -68,6 +96,8 @@ while True:
     print(misCoches, file=sys.stderr, flush=True)
     print(cochesEnemigo, file=sys.stderr, flush=True)
     print(bolas, file=sys.stderr, flush=True)
+    print(getDistanciaABolas(misCoches, bolas), file=sys.stderr, flush=True)
+    print(getAnguloABolas(misCoches, bolas), file=sys.stderr, flush=True)
 
     buscaBolas = quienBucarBolas(misCoches, bolas)
     enemigosCochesConBolas = []
@@ -120,4 +150,3 @@ while True:
         # X Y THRUST MESSAGE
 
         print(str(dirX)+" "+str(dirY)+" "+str(aceleracion)+" "+coche)
-        #print(str(dirX)+" "+str(dirY)+" "+"52.4"+" "+coche)
