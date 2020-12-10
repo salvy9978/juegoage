@@ -51,11 +51,13 @@ def getAngulo(x, y):
 def getDiferenciaAngulos(angulo, x1, y1, x2, y2):
     anguloAux = getAngulo(x2-x1, y2-y1)
     angulo1 = abs(angulo-anguloAux)
-    angulo2 = abs(angulo-abs(360-anguloAux))
-    if(anguloAux<=angulo):
-        return angulo1
-    else:
-        return angulo2
+    angulo2 = abs(angulo+abs(360-anguloAux))
+    angulo3 = abs(anguloAux+abs(360-angulo))
+    angulos = []
+    angulos.append(angulo1)
+    angulos.append(angulo2)
+    angulos.append(angulo3)
+    return min(angulos)
 
 
 def getDistanciaABolas(misCohes, bolas): #coche1 - bola1, coche2 - bola1, coche1 - bola2, coche2 - bola2

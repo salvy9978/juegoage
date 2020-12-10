@@ -25,8 +25,8 @@ distanciaUmbralFrenarParaDefender = 1200
 #cosas de angulos
 anguloParaIrAlCentro = 18
 umbralAnguloChoqueConMiCoche = 10
-umbralAnguloChoqueConCocheEnemigo = 60
-penalizacionMetrosPorAngulo = 400
+umbralAnguloChoqueConCocheEnemigo = 80
+penalizacionMetrosPorAngulo = 600
 umbralRentaIrPorBola = 3000
 
 ######################################### FUNCIONES ##############################
@@ -51,12 +51,13 @@ def getAngulo(x, y):
 def getDiferenciaAngulos(angulo, x1, y1, x2, y2):
     anguloAux = getAngulo(x2-x1, y2-y1)
     angulo1 = abs(angulo-anguloAux)
-    angulo2 = abs(angulo-abs(360-anguloAux))
-    if(anguloAux<=angulo):
-        return angulo1
-    else:
-        return angulo2
-
+    angulo2 = abs(angulo+abs(360-anguloAux))
+    angulo3 = abs(anguloAux+abs(360-angulo))
+    angulos = []
+    angulos.append(angulo1)
+    angulos.append(angulo2)
+    angulos.append(angulo3)
+    return min(angulos)
 
 def getDistanciaABolas(misCohes, bolas): #coche1 - bola1, coche2 - bola1, coche1 - bola2, coche2 - bola2
     listaDistancias = []
@@ -128,13 +129,10 @@ def aQuienApunto(coche, cochesEnemigo, bolas):
     return id
 def printAngulo(coche):
     anguloAux = getAngulo(0-coche[2], 0-coche[3])
+    print("Angulo Coche"+str(coche[6]), file=sys.stderr, flush=True)
     print("Angulo Aux"+str(anguloAux), file=sys.stderr, flush=True)
-    angulo1 = abs(coche[6]-anguloAux)
-    angulo2 = abs(coche[6]-abs(360-anguloAux))
-    if(anguloAux<=coche[6]):
-        print("Angulo diferencia"+str(angulo1), file=sys.stderr, flush=True)
-    else:
-        print("Angulo diferencia"+str(angulo2), file=sys.stderr, flush=True)
+    print("Angulo Diff"+str(getDiferenciaAngulos(coche[6],coche[2],coche[3],0,0)), file=sys.stderr, flush=True)
+
 def deboIrCentro(coche, cochesEnemigo):
     coordenadas = [0,0]
     for i in cochesEnemigo:
@@ -184,6 +182,9 @@ while True:
         coche = ""
         # Write an action using print
         # To debug: print("Debug messages...", file=sys.stderr, flush=True)
+        if i==0:
+            print(printAngulo(misCoches[i]), file=sys.stderr, flush=True)
+
         dirX = 0
         dirY = 0
         aceleracion = 0
