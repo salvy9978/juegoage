@@ -22,13 +22,12 @@ distanciaUmbralCirculoDefensa = 800
 distanciaUmbralCirculoAtaque = 2500
 distanciaEnemigoEstaEnCentro = 800
 distanciaUmbralFrenarParaDefender = 1200
-umbralRentaIrPorBola = 3000
 #cosas de angulos
 anguloParaIrAlCentro = 18
 umbralAnguloChoqueConMiCoche = 10
 umbralAnguloChoqueConCocheEnemigo = 60
 penalizacionMetrosPorAngulo = 400
-
+umbralRentaIrPorBola = 3000
 
 ######################################### FUNCIONES ##############################
 def getDistancia(x1, y1, x2, y2):
@@ -50,9 +49,10 @@ def getAngulo(x, y):
     return angulo
 
 def getDiferenciaAngulos(angulo, x1, y1, x2, y2):
-    angulo1 = abs(angulo-getAngulo(x2-x1, y2-y1))
-    angulo2 = abs(angulo-abs(360-getAngulo(x2-x1, y2-y1)))
-    if(angulo1<=angulo2):
+    anguloAux = getAngulo(x2-x1, y2-y1)
+    angulo1 = abs(angulo-anguloAux)
+    angulo2 = abs(angulo-abs(360-anguloAux))
+    if(anguloAux<=angulo):
         return angulo1
     else:
         return angulo2
@@ -126,7 +126,15 @@ def aQuienApunto(coche, cochesEnemigo, bolas):
                 return id
 
     return id
-
+def printAngulo(coche):
+    anguloAux = getAngulo(0-coche[2], 0-coche[3])
+    print("Angulo Aux"+str(anguloAux), file=sys.stderr, flush=True)
+    angulo1 = abs(coche[6]-anguloAux)
+    angulo2 = abs(coche[6]-abs(360-anguloAux))
+    if(anguloAux<=coche[6]):
+        print("Angulo diferencia"+str(angulo1), file=sys.stderr, flush=True)
+    else:
+        print("Angulo diferencia"+str(angulo2), file=sys.stderr, flush=True)
 def deboIrCentro(coche, cochesEnemigo):
     coordenadas = [0,0]
     for i in cochesEnemigo:
@@ -176,7 +184,6 @@ while True:
         coche = ""
         # Write an action using print
         # To debug: print("Debug messages...", file=sys.stderr, flush=True)
-
         dirX = 0
         dirY = 0
         aceleracion = 0

@@ -25,7 +25,7 @@ public class Main {
 	        	break;
 	        case "Windows":
 	        	String rutaRelativa = new File("").getAbsolutePath();
-	            String rutaProyecto = "\\src\\test\\java\\AgentSalvi4.py";
+	            String rutaProyecto = "\\src\\test\\java\\AgentSalvi5.py";
 	            gameRunner.addAgent("python3 "+ "\""+ rutaRelativa + rutaProyecto +"\"");
 	            
 	        	break;

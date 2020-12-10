@@ -49,9 +49,10 @@ def getAngulo(x, y):
     return angulo
 
 def getDiferenciaAngulos(angulo, x1, y1, x2, y2):
-    angulo1 = abs(angulo-getAngulo(x2-x1, y2-y1))
-    angulo2 = abs(angulo-abs(360-getAngulo(x2-x1, y2-y1)))
-    if(angulo1<=angulo2):
+    anguloAux = getAngulo(x2-x1, y2-y1)
+    angulo1 = abs(angulo-anguloAux)
+    angulo2 = abs(angulo-abs(360-anguloAux))
+    if(anguloAux<=angulo):
         return angulo1
     else:
         return angulo2
