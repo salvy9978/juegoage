@@ -192,10 +192,11 @@ while True:
                 dirX = 0
                 dirY = 0
                 coche = "DejarBola"
-                if(getDiferenciaAngulos(misCoches[i][6],misCoches[i][2],misCoches[i][3],0,0)<anguloParaIrAlCentro):
+                '''if(getDiferenciaAngulos(misCoches[i][6],misCoches[i][2],misCoches[i][3],0,0)<anguloParaIrAlCentro):
                     aceleracion = aceleracionMaxIrCentro
                 else:
-                    aceleracion = aceleracionMinIrCentro
+                    aceleracion = aceleracionMinIrCentro'''
+                aceleracion = aceleracionMaxIrCentro * (1 - getDiferenciaAngulos(misCoches[i][6],misCoches[i][2],misCoches[i][3],0,0)/180)
             else:
                 coche = "Huir"
                 dirX = coordenadasIrConPelota[0]
@@ -232,7 +233,7 @@ while True:
                     dirX = 0 # apunta al centro
                     dirY = 0
                 else:
-                    aceleracion = maxAceleracionCogerBola * (getDistancia(bolas[idBola][2],bolas[idBola][3],misCoches[i][2],misCoches[i][3])/2*map_radius)#+1/(anguloABola/360) # si estoy lejos acelero
+                    aceleracion = maxAceleracionCogerBola *  (1 - getDiferenciaAngulos(misCoches[i][6],misCoches[i][2],misCoches[i][3],bolas[idBola][2],bolas[idBola][3])/180) # (getDistancia(bolas[idBola][2],bolas[idBola][3],misCoches[i][2],misCoches[i][3])/2*map_radius)#+1/(anguloABola/360) # si estoy lejos acelero
                     coche = "CogerBolaRapido"
             else: # defender
                 idAQuienAtaco = aQuienAtaco(misCoches[i], misCoches, cochesEnemigo, listaEnemigosAtacados) # mirar que coches deberia atacar

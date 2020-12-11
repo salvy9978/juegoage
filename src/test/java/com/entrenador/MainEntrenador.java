@@ -12,6 +12,7 @@ public class MainEntrenador {
 		List<VariableEstrategia> variablesConfig = new ArrayList<VariableEstrategia>();
 		variablesConfig.add(new VariableEstrategia("actualizacionTiempoBolas", 0, 4, 2, 3));
 		variablesConfig.add(new VariableEstrategia("aceleracionBuscarBolasMax", 0, 200, 120, 150));
+		variablesConfig.add(new VariableEstrategia("aceleracionBuscarBolasMax", 0, 200, 120, 150));
 		variablesConfig.add(new VariableEstrategia("aceleracionBuscarBolasMin", 0, 200, 120, 150));
 		variablesConfig.add(new VariableEstrategia("umbralAcercamientoABola", 0, 4000, 2000, 3000));
 		variablesConfig.add(new VariableEstrategia("aceleracionAcercarAlCentro", 0, 200, 120, 150));
@@ -21,11 +22,14 @@ public class MainEntrenador {
         String rutaProyecto = "\\src\\test\\java\\com\\entrenador\\AgentSalvi.py";
 		String jugadorAEntrenar = "python3 "+ "\""+ rutaRelativa + rutaProyecto +"\"";
 		
+		String rutaProyecto3 = "\\AgentSalvi.py";
+		String jugadorAEntrenar3 = "python3 "+ "\""+ rutaRelativa + rutaProyecto3 +"\"";
+		
 		String rutaRelativa2 = new File("").getAbsolutePath();
         String rutaProyecto2 = "\\src\\test\\java\\com\\entrenador\\AgentSalvi5.py";
 		String jugadorAEntrenar2 = "python3 "+ "\""+ rutaRelativa2 + rutaProyecto2 +"\"";
 		
-		EntrenadorEscaladaEE1 entrenador = new EntrenadorEscaladaEE1(10000, variablesConfig, jugadorAEntrenar, jugadorAEntrenar2);
+		EntrenadorEscaladaEE1 entrenador = new EntrenadorEscaladaEE1(10000, variablesConfig, jugadorAEntrenar3, jugadorAEntrenar2);
 		
 		entrenador.entrenar();
 		

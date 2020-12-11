@@ -24,8 +24,8 @@ distanciaEnemigoEstaEnCentro = 800
 distanciaUmbralFrenarParaDefender = 1200
 #cosas de angulos
 anguloParaIrAlCentro = 18
-umbralAnguloChoqueConMiCoche = 10
-umbralAnguloChoqueConCocheEnemigo = 60
+umbralAnguloChoqueConMiCoche = 18
+umbralAnguloChoqueConCocheEnemigo = 90
 penalizacionMetrosPorAngulo = 400
 umbralRentaIrPorBola = 3000
 
@@ -67,7 +67,7 @@ def getDistanciaABolas(misCohes, bolas): #coche1 - bola1, coche2 - bola1, coche1
             listaDistancias.append(getDistancia(j[2],j[3],i[2],i[3]))
     return listaDistancias
 
-def getTurnosABola(coche, bola):
+def getTurnosABola(coche, bola): # TODO: add velocidad
     turnos = 0
     turnos = turnos + getDistancia(coche[2], coche[3], bola[2], bola[3])
     turnos = turnos + int(getDiferenciaAngulos(coche[6], coche[2], coche[3], bola[2], bola[3])/18) * penalizacionMetrosPorAngulo
@@ -84,7 +84,7 @@ def getTurnosEnemigosABolas(cochesEnemigos, bolas):
 def queBolaBusco(coche, misTurnosABolas, turnosEnemigosABolas, bolas):
     id = -1
     minTurnosBolas = -1
-    for i in range(len(bolas)):
+    for i in range(len(bolas)): # TODO: hay que cambiar para que mire los turnos a la bola en concreto y no pille el minimo global
         turnosAux = getTurnosABola(coche, bolas[i])
         print(turnosAux, file=sys.stderr, flush=True)
         if(turnosAux<min(turnosEnemigosABolas) and turnosAux<=min(misTurnosABolas) and (turnosAux<minTurnosBolas or minTurnosBolas==-1) and turnosAux<umbralRentaIrPorBola):
@@ -92,7 +92,7 @@ def queBolaBusco(coche, misTurnosABolas, turnosEnemigosABolas, bolas):
             minTurnosBolas = turnosAux
     return id;
 
-def aQuienAtaco(coche, misCoches, cochesEnemigo):
+def aQuienAtaco(coche, misCoches, cochesEnemigo, listaEnemigosAtacados):
     id = [-1, -1] #primero 0 seria mis coches 1 cochesRival, y la segunda la posicion en la lista
     for i in range(len(misCoches)):
         if misCoches[i][0]!=coche[0]:
@@ -101,12 +101,14 @@ def aQuienAtaco(coche, misCoches, cochesEnemigo):
                     id = [0,i]
                     return id
     anguloAux = -1
-    for i in range(len(cochesEnemigo)):
+    for i in range(len(cochesEnemigo)): # TODO: posibilidad de que enemigo este apuntando al centro
         if(cochesEnemigo[i][7]!=-1 and getDistancia(cochesEnemigo[i][2], cochesEnemigo[i][3], 0, 0)<distanciaUmbralCirculoAtaque and getDiferenciaAngulos(coche[6], coche[2], coche[3], cochesEnemigo[i][2], cochesEnemigo[i][3])<umbralAnguloChoqueConCocheEnemigo):
             if(getDiferenciaAngulos(coche[6], coche[2], coche[3], cochesEnemigo[i][2], cochesEnemigo[i][3])<anguloAux or anguloAux==-1):
-                id[0]=1
-                id[1]=i
-    return id
+                if i not in listaEnemigosAtacados:
+                    id[0]=1
+                    id[1]=i
+
+    return id # TODO que no vayan los dos a por el mismo
 
 def aQuienApunto(coche, cochesEnemigo, bolas):
     id = [-1, -1] #primero 0 seria bolas 1 cochesRival, y la segunda la posicion en la lista
@@ -129,10 +131,10 @@ def aQuienApunto(coche, cochesEnemigo, bolas):
 
     return id
 
-def deboIrCentro(coche, cochesEnemigo):
+def deboIrCentro(coche, cochesEnemigo): # TODO: add si enemigo nos esta apuntando --> IMPORTANTE
     coordenadas = [0,0]
     for i in cochesEnemigo:
-        if(getDistancia(i[2], i[3], 0,0)<distanciaEnemigoEstaEnCentro):
+        if(getDistancia(i[2], i[3], 0,0)<distanciaEnemigoEstaEnCentro): # TODO: calcula coordenadas de huir, cambiar
             coordenadas[0] = coche[2] + math.cos(math.radians(coche[6])) * map_radius * 100
             coordenadas[1] = coche[3] + math.sin(math.radians(coche[6])) * map_radius * 100
             return coordenadas
@@ -172,7 +174,7 @@ while True:
 
     turnosEnemigosABolas = getTurnosEnemigosABolas(cochesEnemigo, bolas)
     misTurnosABolas = getTurnosEnemigosABolas(misCoches, bolas)
-
+    listaEnemigosAtacados = []
     print(turnosEnemigosABolas, file=sys.stderr, flush=True)
     for i in range(car_count):
         coche = ""
@@ -206,6 +208,7 @@ while True:
                 velocidad = math.sqrt(math.pow(misCoches[i][4],2)+math.pow(misCoches[i][5],2))
                 if velocidad==0:
                     velocidad = epsilon
+                # TODO: posibilidad de add angulo
                 tiempoAprox = getDistancia(misCoches[i][2], misCoches[i][3], bolas[idBola][2], bolas[idBola][3])/velocidad
                 dirX = bolas[idBola][2] + tiempoAprox*bolas[idBola][4]
                 dirY = bolas[idBola][3] + tiempoAprox*bolas[idBola][5]
@@ -226,11 +229,13 @@ while True:
                 if(getDistancia(bolas[idBola][2],bolas[idBola][3],misCoches[i][2],misCoches[i][3])<distanciaUmbralCogerBola):
                     aceleracion = minAceleracionCogerBola # si estoy cerca frenar
                     coche = "CogerBolaLento"
+                    dirX = 0 # apunta al centro
+                    dirY = 0
                 else:
                     aceleracion = maxAceleracionCogerBola * (getDistancia(bolas[idBola][2],bolas[idBola][3],misCoches[i][2],misCoches[i][3])/2*map_radius)#+1/(anguloABola/360) # si estoy lejos acelero
                     coche = "CogerBolaRapido"
             else: # defender
-                idAQuienAtaco = aQuienAtaco(misCoches[i], misCoches, cochesEnemigo) # mirar que coches deberia atacar
+                idAQuienAtaco = aQuienAtaco(misCoches[i], misCoches, cochesEnemigo, listaEnemigosAtacados) # mirar que coches deberia atacar
                 if idAQuienAtaco[0]!=-1:
                     if idAQuienAtaco[0]==0: #atacarme a mi para coger bola antes de robo
                         dirX = misCoches[idAQuienAtaco[1]][2]
@@ -242,6 +247,7 @@ while True:
                         dirY = cochesEnemigo[idAQuienAtaco[1]][3]
                         aceleracion = aceleracionAtaque
                         coche = "AttackOther"
+                        listaEnemigosAtacados.append(idAQuienAtaco)
                 else: #ir al circulo de defensa o apuntar si estoy en el
                     print("Hola" + str(getDistancia(misCoches[i][2], misCoches[i][3],0,0)), file=sys.stderr, flush=True)
                     distanciaCocheAlCentro = getDistancia(misCoches[i][2], misCoches[i][3],0,0)
@@ -249,7 +255,7 @@ while True:
                         coche = "GoToDefense"
                         dirX = 0
                         dirY = 0
-                        if(distanciaCocheAlCentro<distanciaUmbralFrenarParaDefender):
+                        if(distanciaCocheAlCentro<distanciaUmbralFrenarParaDefender): #ir rapido a defender si apunta al centro, sino ir lento
                             aceleracion = 0
                             idQuienApuntar = aQuienApunto(misCoches[i], cochesEnemigo, bolas)
                             if idQuienApuntar[0]==0:

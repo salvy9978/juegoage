@@ -11,12 +11,12 @@ min_swap_impulse = int(input())  # Impulse needed to steal a prisoner from anoth
 car_count = int(input())  # the number of cars you control
 
 ####################################### VARIABLES #################################
-actualizacionTiempoBolas = 1
-aceleracionBuscarBolasMax = 200
-aceleracionBuscarBolasMin = 10
-umbralAcercamientoABola = 550
-aceleracionAcercarAlCentro = 50
-aceleracionChoqueMax = 180
+actualizacionTiempoBolas = 0
+aceleracionBuscarBolasMax = 0
+aceleracionBuscarBolasMin = 0
+umbralAcercamientoABola = 0
+aceleracionAcercarAlCentro = 0
+aceleracionChoqueMax = 0
 
 with open('archivoVariables.json') as file:
     data = json.load(file)
