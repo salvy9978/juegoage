@@ -22,7 +22,7 @@ public class MainEntrenadorCoevolucion {
 		variablesConfig.add(new VariableEstrategia("penalizacionMetrosPorAngulo", 0, 4000, 500, 1500));
 		
 		String rutaRelativa = new File("").getAbsolutePath();
-        String rutaProyecto = "\\Agent2Train.py";
+        String rutaProyecto = "\\Agent2Train.py"; 
 		String jugadorAEntrenar = "python3 "+ "\""+ rutaRelativa + rutaProyecto +"\"";
 		
 		EntrenadorCoevolucion entrenadorCoevolucion;
