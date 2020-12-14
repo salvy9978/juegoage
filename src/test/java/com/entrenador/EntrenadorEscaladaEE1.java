@@ -93,7 +93,7 @@ public class EntrenadorEscaladaEE1 {
 			e.printStackTrace();
 		}
 		
-		
+		String rutaRelativa = new File("").getAbsolutePath();
 		
 		GameResult gameResult;
 		for(int i=0; i<20;i++) {
@@ -106,14 +106,40 @@ public class EntrenadorEscaladaEE1 {
 		    if(playerCmdEntrenar!=null) {
 		    	gameRunner.addAgent(playerCmdEntrenar);
 		    }
-		    
-		    if(playerRivalClass!=null) {
-		    	gameRunner.addAgent(playerRivalClass);
+
+		    int botRival = i % 4;
+		    switch(botRival) {
+		    case 0:
+		    	if(playerRivalClass!=null) {
+			    	gameRunner.addAgent(playerRivalClass);
+			    }
+			    
+			    if(playerCmdRival!=null) {
+			    	gameRunner.addAgent(playerCmdRival);
+			    }
+		    	break;
+		    case 1:
+		    	gameRunner.addAgent(AgentAGE2.class);
+		    	break;
+		    case 2:
+		    	String rival3 = "python3 "+ "\""+ rutaRelativa + "\\src\\test\\java\\com\\entrenador\\AgentSalvi.py" +"\"";
+		    	gameRunner.addAgent(rival3);
+		    	break;
+		    case 3:
+		    	String rival4 = "python3 "+ "\""+ rutaRelativa + "\\src\\test\\java\\com\\entrenador\\bot_4.py" +"\"";
+		    	gameRunner.addAgent(rival4);
+		    	break;
+		    default:
+		    	if(playerRivalClass!=null) {
+			    	gameRunner.addAgent(playerRivalClass);
+			    }
+			    
+			    if(playerCmdRival!=null) {
+			    	gameRunner.addAgent(playerCmdRival);
+			    }
+		    	break;
 		    }
 		    
-		    if(playerCmdRival!=null) {
-		    	gameRunner.addAgent(playerCmdRival);
-		    }
 		    
 		    gameResult = gameRunner.simulate();
 		    scores = gameResult.scores;

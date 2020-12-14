@@ -50,7 +50,7 @@ def getDistanciaABolas(misCohes, bolas): #coche1 - bola1, coche2 - bola1, coche1
 def getTurnosABola(coche, bola):
     turnos = 0
     velocidad = math.sqrt(math.pow(coche[4],2)+math.pow(coche[5],2))
-    velocidad = (velocidad==0)?1:velocidad
+    
     turnos = turnos + getDistancia(coche[2], coche[3], bola[2], bola[3])/velocidad
     turnos = turnos + getDiferenciaAngulos(coche[6], coche[2], coche[3], bola[2], bola[3])/18
     return turnos
